@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using net_core_based.Entities;
+using net_core_based.Repositories;
 using net_core_based.Services;
 using System.Reflection;
 using System.Text;
@@ -92,9 +93,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+// Add some policy
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ViewItemsPolicy", policy => policy.RequireClaim("ViewItems"));
+});
+
 // DI
-builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<JwtService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IClaimService, ClaimService>();
+builder.Services.AddScoped<ITodoService, TodoService>();
+builder.Services.AddScoped<ITodoRepository, TodoRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

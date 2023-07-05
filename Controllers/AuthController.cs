@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using net_core_based.Models;
 using net_core_based.Services;
@@ -54,7 +55,7 @@ namespace net_core_based.Controllers
         
         [HttpPost]
         [Route("create-role")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
         public async Task<IActionResult> CreateRole(string roleName)
         {
             return await _authService.CreateRole(roleName);

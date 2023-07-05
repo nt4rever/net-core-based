@@ -9,5 +9,14 @@ namespace net_core_based.Entities
         {
 
         }
+
+        #region Dbset
+        public DbSet<Todo> Todos { get; set; }
+        #endregion
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
-}
+}   
