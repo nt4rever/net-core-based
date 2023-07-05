@@ -12,7 +12,6 @@ namespace net_core_based.Controllers
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult HandleError() => Problem();
 
-
         [Route("/error-development")]
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult HandleErrorDevelopment([FromServices] IHostEnvironment hostEnvironment)

@@ -9,7 +9,7 @@ namespace net_core_based.Controllers
     public class TestController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Manager")]
         public IActionResult Test()
         {
             return Ok(new

@@ -22,7 +22,7 @@ builder.Services.AddSwaggerGen(
          options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
          {
              In = ParameterLocation.Header,
-             Description = "Please enter token",
+             Description = "Please enter jwt token",
              Name = "Authorization",
              Type = SecuritySchemeType.Http,
              BearerFormat = "JWT",
@@ -47,10 +47,22 @@ builder.Services.AddSwaggerGen(
      }
 );
 
+// Enable cors
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 // Add Identity Framework core
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(
+    options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireDigit = false;
+            options.Password.RequiredLength = 6;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        }
+    )
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
@@ -80,7 +92,9 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddScoped<AuthService, AuthService>();
+// DI
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<JwtService>();
 
 var app = builder.Build();
 
